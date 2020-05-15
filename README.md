@@ -5,7 +5,7 @@ It allows you to run 1 command and print the values in 1 or all registers.
 
 ### Getting Started
 
-1. Save the p4register reader **in the same location as your topology file**
+1. Save the p4registerreader.py file **in the same location as your topology file**
 
 2. CD into the directory of the file
 
