@@ -1,5 +1,7 @@
 # P4 Register Reader
 
+[Watch a demonstration video](https://youtu.be/eyT1i5Cv8Eg)
+
 P4 Register Reader is a debugging tool for reading registers inside of a P4 app.
 It allows you to run 1 command and print the values in 1 or all registers.
 
