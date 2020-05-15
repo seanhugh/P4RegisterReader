@@ -9,6 +9,7 @@ import os
 import time
 import signal
 from threading import Event
+from p4utils.utils.topology import Topology
 
 # Utility Functions
 # Borrowed from: https://stackoverflow.com/questions/1265665/how-can-i-check-if-a-string-represents-an-int-without-using-try-except
@@ -108,8 +109,6 @@ class ReadCounters(object):
             packets.append(self.controller.register_read(registerName, i))
         return (packets)
 
-
-
 # def writeRegisterName():
 #     with open("filename.txt", "r")
 
@@ -149,7 +148,12 @@ if __name__ == "__main__":
             # Set the switch values
 
             if(actionType == "a"):
-                switches = ["t1"] # ALL switches
+
+                topo = Topology(db="../topology.db")
+
+                # Get all the switches
+                switches = topo.get_p4switches().keys()
+
             else:
                 switches = [actionType] # Just the inputted switch
             
