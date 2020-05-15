@@ -10,31 +10,6 @@ import time
 import signal
 from threading import Event
 
-
-f_qlen = {}
-
-bloomWidth = 128
-
-def handler(signum, frame):
-    for link in f_qlen:
-        f_qlen[link].close()
-    sys.exit("exit...")
-
-class ReadCounters(object):
-    # initialize register reader
-    def __init__(self, sw_name):
-        self.topo = Topology(db="../topology.db")
-        self.sw_name = sw_name
-        self.thrift_port = self.topo.get_thrift_port(sw_name)
-        self.controller = SimpleSwitchAPI(self.thrift_port)
-
-    def get_qlen(self):
-        packets = []
-        for i in range(0, bloomWidth):
-            packets.append(self.controller.register_read("bloomFilter", i))
-        return (packets)
-
-
 # Utility Functions
 # Borrowed from: https://stackoverflow.com/questions/1265665/how-can-i-check-if-a-string-represents-an-int-without-using-try-except
 def RepresentsInt(s):
@@ -46,6 +21,14 @@ def RepresentsInt(s):
 
 def ContainsWhiteSpace(s):
     return(' ' in s)
+
+def getRegisterNameWidth():
+    # Does file exist?
+    f = open("registerData.txt", "r")
+    file_contents = f.read()
+    data = (file_contents.split(" "))
+    return(data)
+
 
 # Script for dynamic register name and size
 def existsRegisterName():
@@ -98,7 +81,34 @@ def writeRegisterName():
     # Write out values
     f = open("registerData.txt", "w")
     f.write(registerName + " " + registerSize)
-   
+
+f_qlen = {}
+
+def handler(signum, frame):
+    for link in f_qlen:
+        f_qlen[link].close()
+    sys.exit("exit...")
+
+class ReadCounters(object):
+    # initialize register reader
+    def __init__(self, sw_name):
+        self.topo = Topology(db="../topology.db")
+        self.sw_name = sw_name
+        self.thrift_port = self.topo.get_thrift_port(sw_name)
+        self.controller = SimpleSwitchAPI(self.thrift_port)
+
+    def get_qlen(self):
+        packets = []
+
+        data = getRegisterNameWidth()
+        registerWidth = int(data[1])
+        registerName = data[0]
+
+        for i in range(0, registerWidth):
+            packets.append(self.controller.register_read(registerName, i))
+        return (packets)
+
+
 
 # def writeRegisterName():
 #     with open("filename.txt", "r")
