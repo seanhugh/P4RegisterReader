@@ -93,7 +93,7 @@ def handler(signum, frame):
 class ReadCounters(object):
     # initialize register reader
     def __init__(self, sw_name):
-        self.topo = Topology(db="../topology.db")
+        self.topo = Topology(db="./topology.db")
         self.sw_name = sw_name
         self.thrift_port = self.topo.get_thrift_port(sw_name)
         self.controller = SimpleSwitchAPI(self.thrift_port)
@@ -149,7 +149,7 @@ if __name__ == "__main__":
 
             if(actionType == "a"):
 
-                topo = Topology(db="../topology.db")
+                topo = Topology(db="./topology.db")
 
                 # Get all the switches
                 switches = topo.get_p4switches().keys()
